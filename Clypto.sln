@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30420.98
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C8A7C360-F428-46EB-B907-A1FF544151B8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2EB80BB5-3F7C-4D04-9F19-BF9D4023EDCB}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		.circleci\config.yml = .circleci\config.yml
+		Install-FFmpeg.ps1 = Install-FFmpeg.ps1
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clypto.Server", "src\Clypto\Server\Clypto.Server.csproj", "{0BDDEFA6-A752-414F-A9B7-F9DFF59D7683}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clypto.Client", "src\Clypto\Client\Clypto.Client.csproj", "{DD0206BC-351F-4AAE-B894-BC908EF2C9BF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clypto.Shared", "src\Clypto\Shared\Clypto.Shared.csproj", "{F0A5BC53-270A-47F8-8AC4-505A2C4024C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0BDDEFA6-A752-414F-A9B7-F9DFF59D7683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BDDEFA6-A752-414F-A9B7-F9DFF59D7683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BDDEFA6-A752-414F-A9B7-F9DFF59D7683}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BDDEFA6-A752-414F-A9B7-F9DFF59D7683}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD0206BC-351F-4AAE-B894-BC908EF2C9BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD0206BC-351F-4AAE-B894-BC908EF2C9BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD0206BC-351F-4AAE-B894-BC908EF2C9BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD0206BC-351F-4AAE-B894-BC908EF2C9BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0A5BC53-270A-47F8-8AC4-505A2C4024C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0A5BC53-270A-47F8-8AC4-505A2C4024C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0A5BC53-270A-47F8-8AC4-505A2C4024C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0A5BC53-270A-47F8-8AC4-505A2C4024C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0BDDEFA6-A752-414F-A9B7-F9DFF59D7683} = {C8A7C360-F428-46EB-B907-A1FF544151B8}
+		{DD0206BC-351F-4AAE-B894-BC908EF2C9BF} = {C8A7C360-F428-46EB-B907-A1FF544151B8}
+		{F0A5BC53-270A-47F8-8AC4-505A2C4024C6} = {C8A7C360-F428-46EB-B907-A1FF544151B8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D19F4C8A-7129-4BC1-A1A8-53CBD02C466B}
+	EndGlobalSection
+EndGlobal

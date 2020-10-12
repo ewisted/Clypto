@@ -1,0 +1,47 @@
+# CircleCI 2 configuration file
+# Check https://circleci.com/docs/2.0/getting-started/#section=getting-started for more details
+
+version: 2.1
+
+orbs:
+  docker: circleci/docker@1.4.0
+  aks: circleci/azure-aks@0.2.1
+
+jobs:
+  build-and-push:
+    executor: docker/docker
+    steps:
+      - docker/publish:
+          path: src/Clypto.DiscordBot
+          docker-username: $DOCKERHUB_USERNAME
+          docker-password: $DOCKERHUB_PASSWORD
+          image: Clypto/DiscordBot
+          tag: << pipeline.git.tag >>
+
+workflows:
+  lint:
+    jobs:
+      - docker/hadolint:
+          dockerfiles:
+            - ~/project/app/src/Clypto.DiscordBot/Dockerfile
+          ignore-rules: 'DL4005,DL3008'
+          trusted-registries: 'docker.io'
+          filters:
+            branches:
+              ignore: master
+
+  build:
+    jobs:
+      - build-and-push:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+
+  deploy:
+    jobs:
+      - deploy-orb/terraform_deploy:
+          filters:
+            branches:
+              only: master
