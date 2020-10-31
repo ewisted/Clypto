@@ -37,13 +37,16 @@ namespace Clypto.Server.Services
 
             _client.MessageCreated += (client, msg) =>
             {
-                if (!msg.Message.Content.ToLower().StartsWith("pl "))
+                if (!msg.Message.Content.ToLower().StartsWith("pp "))
                 {
                     return Task.CompletedTask;
                 }
 
                 int argsPos = 3;
                 var clipArgs = msg.Message.Content.Substring(argsPos);
+
+
+
                 var command = _commands.FindCommand("play", out string rawArguments);
                 var context = _commands.CreateFakeContext(msg.Author, msg.Channel, $"play {clipArgs}", "play", command, clipArgs);
                 Task.Run(async () => await _commands.ExecuteCommandAsync(context));
@@ -76,7 +79,7 @@ namespace Clypto.Server.Services
             };
             _commands.CommandErrored += (client, e) =>
             {
-                Log.Error("{user} tried executing '{command}' and failed. \n{errortype}: {error}.", e.Context.User.Username, e.Command.QualifiedName ?? "unknown", e.Exception.GetType(), e.Exception.Message ?? "no error details");
+                Log.Error("{user} tried executing '{command}' and failed. \n{errortype}: {error}.", e.Context.User.Username, e.Command?.QualifiedName ?? "unknown", e.Exception?.GetType(), e.Exception?.Message ?? "no error details");
                 return Task.CompletedTask;
             };
 

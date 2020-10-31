@@ -60,6 +60,7 @@ namespace Clypto.Server
 			Host.CreateDefaultBuilder(args)
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
+					webBuilder.UseUrls("https://localhost:5001;http://localhost:5000");
 					webBuilder.UseStartup<Startup>();
 				});
 
@@ -85,7 +86,8 @@ namespace Clypto.Server
 			var seedDb = seedDbFromArgs; // TODO replace True when Env is Dev
 			var dropDb = env.IsDevelopment() || env.IsStaging();
 			dropDb = false;
-			seedDb = true;
+			seedDb = false;
+			genSeed = false;
 
 			// Generated updated seed file and exit
 			if (genSeed)

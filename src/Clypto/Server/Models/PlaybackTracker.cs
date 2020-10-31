@@ -19,17 +19,17 @@ namespace Clypto.Server.Models
             get { return isInactive; }
             set 
             {
-                isInactive = value;
-                if (isInactive)
+                if (!isInactive && value)
                 {
                     inactiveSince = DateTime.UtcNow;
                     Task.Run(async () => await StartInactivityTimer());
                 }
-                else
+                else if (isInactive && !value)
                 {
                     inactiveSince = null;
                     tokenSource.Cancel();
                 }
+                isInactive = value;
             }
         }
         public TimeSpan TimeInactive

@@ -10,6 +10,9 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using DSharpPlus.EventArgs;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Clypto.Server.Services
 {
@@ -24,6 +27,7 @@ namespace Clypto.Server.Services
         {
             _client = client;
             _voice = _client.UseVoiceNext();
+            _client.VoiceStateUpdated += HandleForcedBotDisconnect;
         }
 
         public async Task<VoiceNextConnection> JoinOrChangeVoiceAsync(DiscordGuild guild, DiscordChannel voiceChannel)
@@ -147,6 +151,18 @@ namespace Clypto.Server.Services
             tracker.InactivityThresholdReached -= HandleInactivityTimeout;
             Log.Information("Inactivity timeout reached for {guildname}. Leaving voice.", tracker.Guild.Name);
             await LeaveVoiceAsync(tracker.Guild);
+        }
+
+        private Task HandleForcedBotDisconnect(object sender, VoiceStateUpdateEventArgs e)
+        {
+            if (e.User.Id != _client.CurrentUser.Id || e.After.Channel != null) return Task.CompletedTask;
+
+            var tracker = _connections[e.Guild.Id];
+            if (tracker == null) return Task.CompletedTask;
+
+            tracker.IsInactive = true;
+            _connections[e.Guild.Id] = tracker;
+            return Task.CompletedTask;
         }
 
         private static Process CreateProcess(string path)

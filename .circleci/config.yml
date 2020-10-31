@@ -12,7 +12,7 @@ jobs:
     executor: docker/docker
     steps:
       - docker/publish:
-          path: src/Clypto.DiscordBot
+          path: src/Clypto
           docker-username: $DOCKERHUB_USERNAME
           docker-password: $DOCKERHUB_PASSWORD
           image: Clypto/DiscordBot

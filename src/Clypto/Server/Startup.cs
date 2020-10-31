@@ -10,6 +10,8 @@ using Clypto.Server.Services;
 using DSharpPlus;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
+using System.Reflection;
+using AutoMapper;
 
 namespace Clypto.Server
 {
@@ -34,6 +36,7 @@ namespace Clypto.Server
                 MinimumLogLevel = Microsoft.Extensions.Logging.LogLevel.Debug
             };
 
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<IClipRepository, ClipMongoRepository>();
             services.AddTransient<AudioLoudnessNormalizer>();
             services.AddTransient<CloudBlobClient>(s =>
