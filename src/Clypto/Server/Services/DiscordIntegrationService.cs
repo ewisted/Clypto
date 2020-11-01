@@ -6,6 +6,8 @@ using Serilog;
 using DSharpPlus.CommandsNext;
 using Microsoft.Extensions.Configuration;
 using Clypto.Server.Commands;
+using System.Linq;
+using DSharpPlus.Entities;
 
 namespace Clypto.Server.Services
 {
@@ -29,7 +31,6 @@ namespace Clypto.Server.Services
             _config.GetSection("Discord:StringPrefixes").Bind(stringPrefixes);
             var commandConfig = new CommandsNextConfiguration
             {
-                StringPrefixes = stringPrefixes,
                 EnableDms = true,
                 EnableMentionPrefix = true,
                 Services = provider
@@ -37,7 +38,7 @@ namespace Clypto.Server.Services
 
             _client.MessageCreated += (client, msg) =>
             {
-                if (!msg.Message.Content.ToLower().StartsWith("pp "))
+                if (!stringPrefixes.Any(s => msg.Message.Content.ToLower().StartsWith($"{s} ")))
                 {
                     return Task.CompletedTask;
                 }
@@ -45,10 +46,28 @@ namespace Clypto.Server.Services
                 int argsPos = 3;
                 var clipArgs = msg.Message.Content.Substring(argsPos);
 
+                var commandParts = clipArgs.Split(' ');
+                var commandPrefix = commandParts.FirstOrDefault();
+                if (commandPrefix == null)
+                {
+                    var mentions = new List<IMention>();
+                    mentions.Add(new UserMention(msg.Author));
+                    Task.Run(async () => await msg.Channel.SendMessageAsync($"Could not execute command or clip: could not find a match for input \"{clipArgs}\"", false, null, mentions));
+                    return Task.CompletedTask;
+                }
 
+                CommandContext context;
+                var command = _commands.FindCommand(commandPrefix, out string rawArguments);
+                if (command != null)
+                {
+                    context = _commands.CreateFakeContext(msg.Author, msg.Channel, clipArgs, commandPrefix, command, clipArgs.Substring(commandPrefix.Length).Trim());
+                }
+                else
+                {
+                    command = _commands.FindCommand("play", out rawArguments);
+                    context = _commands.CreateFakeContext(msg.Author, msg.Channel, $"play {clipArgs}", "play", command, clipArgs);
+                }
 
-                var command = _commands.FindCommand("play", out string rawArguments);
-                var context = _commands.CreateFakeContext(msg.Author, msg.Channel, $"play {clipArgs}", "play", command, clipArgs);
                 Task.Run(async () => await _commands.ExecuteCommandAsync(context));
                 return Task.CompletedTask;
             };
